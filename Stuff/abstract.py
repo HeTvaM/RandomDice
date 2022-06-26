@@ -1,5 +1,6 @@
 import os
 import pygame as pg
+import wPygame
 
 from abc import ABC, abstractmethod
 from .cell import Cell
@@ -8,14 +9,27 @@ from .constpack import DICE_TYPES, COORDS, DICE_COLORS
 from .constpack import START_X, START_Y
 from .constpack import RED
 
-class Dice(Cell):
+class Obj(ABC, Cell):
+    def __init__(self, x, y, color=RED):
+        super().__init__(x, y)
+        self.fill(color)
+
+    @abstractmethod
+    def draw(self):
+        pass
+
+
+class Dice(Obj):
     def __init__(
                  self, x, y,
                  type,
                  dmg, duration,
                  effect=None
     ):
-        super().__init__(x,y)
+        super().__init__(
+            x,y,
+            DICE_COLORS[DICE_TYPES[type]]
+        )
 
         self.lvl = 1
         self.time = 0
@@ -24,7 +38,6 @@ class Dice(Cell):
         self.dmg = dmg
         self.duration = duration
         self.type = DICE_TYPES[type]
-        self.fill(DICE_COLORS[self.type])
 
         self.effect = effect
 
@@ -36,6 +49,9 @@ class Dice(Cell):
            return True
 
         return False
+
+    def draw(self):
+        pass
 
     def focus(self):
         return self.focus()
@@ -54,17 +70,19 @@ class Dice(Cell):
     def attack(self):
         pass
 
-class Entity(Cell):
+class Entity(Obj):
     def __init__(
                  self,
                  hp, speed, armor
     ):
-        super().__init__(START_X, START_Y)
+        super().__init__(
+            START_X, START_Y,
+            color=RED
+        )
 
         self.hp = hp
         self.speed = speed
         self.armor = armor/100
-        self.fill(RED)
 
         self.flag = True
 
@@ -72,15 +90,15 @@ class Entity(Cell):
         self.is_move()
 
         if self.flag:
-            self.rect.y -= self.speed
+            self.y = -self.speed
         else:
-            self.rect.x += self.speed
+            self.x = self.speed
 
     def is_move(self):
-        if self.rect.y <= COORDS[0]:
+        if self.y <= COORDS[0]:
             self.flag = False
 
-        if self.rect.x >= COORDS[1] and not self.flag:
+        if self.x >= COORDS[1] and not self.flag:
             self.speed *= -1
             self.flag = True
 
@@ -93,7 +111,11 @@ class Entity(Cell):
     def is_dead(self):
         if self.hp <= 0:
             return True
+
         return False
+
+    def draw(self):
+        pass
 
     @abstractmethod
     def do_ability(self):

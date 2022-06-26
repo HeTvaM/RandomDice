@@ -25,7 +25,7 @@ class Window(SceneABS):
         pass
 
     def create_data(self, data):
-        self.controller.start(5, 90)
+        self.controller.loadlvl()
 
     def update(self, mouse):
         self.controller.update(mouse)
@@ -36,7 +36,8 @@ class Window(SceneABS):
 
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1:
-                self.controller.start(5, 90)
+                self.controller.kill()
+                #self.controller.loadlvl()
 
         if event.type == pg.MOUSEBUTTONUP:
             if event.button == 1: pass

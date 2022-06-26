@@ -15,3 +15,19 @@ class Cell(pg.sprite.Sprite):
 
     def get_coords(self):
         return (self.rect.x, self.rect.y)
+
+    @property
+    def x(self):
+        return self.rect.x
+
+    @x.setter
+    def x(self, x):
+        self.rect.x += x
+
+    @property
+    def y(self):
+        return self.rect.y
+
+    @y.setter
+    def y(self, y):
+        self.rect.y += y

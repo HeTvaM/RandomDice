@@ -18,6 +18,13 @@ DICE_TYPES = {
     1: "FAST"
 }
 
+LVL = {
+    0: [5, 90],
+    1: [10, 90],
+    2: [10, 80],
+    3: [15, 65]
+}
+
 
 # init some basic colors
 WHITE = (255, 255, 255)
