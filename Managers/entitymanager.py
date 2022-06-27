@@ -1,21 +1,36 @@
 import os
 import pygame as pg
+import gamecontroller as gc
 from icecream import ic
 
-import gamecontroller as gc
 from Entities.entities import *
 
+from Stuff.constpack import CELL_SIZE
+from Stuff.constpack import HP, SPEED, ARMOR
+from PygameWidgets.wPygame.Widgets import Font, Text
+from PygameWidgets.wPygame.constpack import WHITE, terminal
+
+
+FONT = Font(terminal, WHITE, 30)
+
+
 class EntityManager:
-    def __init__(self, screen):
+    def __init__(self, screen, group):
         self.screen = screen
         self.entity = []
-        self.group = pg.sprite.Group()
+        self.group = group
         self.controller = gc.GameController()
 
         self.amount = 0
         self.time = 0
-        self.n = 0
         self.dead = 0
+        self.n = 0
+
+        self.text = Text(
+            screen, "50", font=FONT,
+            text_location="C"
+        )
+        self.text.location(CELL_SIZE, CELL_SIZE)
 
     def set_params(self, amount, duration):
         self.amount = amount
@@ -24,7 +39,7 @@ class EntityManager:
     def spawn(self):
         def create_entity():
             new = Base(
-               50, 5, 10
+               HP, SPEED, ARMOR
             )
 
             self.entity.append(new)
@@ -75,8 +90,11 @@ class EntityManager:
             self.remove()
             self.controller.loadlvl()
 
-        self.group.update()
-        self.group.draw(self.screen)
+        for cell in self.group:
+            cell.draw(
+                self.text,
+                cell.get_coords(), cell.hp
+            )
 
     def kill(self):
         self.dead += 1
@@ -85,10 +103,11 @@ class EntityManager:
         )
 
     def remove(self):
+        for i in range(self.n):
+            self.group.remove()
         self.amount = 0
         self.duration = 0
         self.time = 0
         self.n = 0
         self.dead = 0
         self.entity = []
-        self.group = pg.sprite.Group()

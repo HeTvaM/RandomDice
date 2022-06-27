@@ -7,11 +7,15 @@ import pygame as pg
 #>------------SUMMARY----------------<
 pg.init()
 
-CELL_SIZE=50
-COORDS = [500, 900]
+CELL_SIZE=75
+COORDS = [500, 875]
 
 START_X = 50
 START_Y = 990
+
+HP = 75
+SPEED = 3
+ARMOR = 10
 
 DICE_TYPES = {
     0: "DEFAULT",
@@ -24,6 +28,15 @@ LVL = {
     2: [10, 80],
     3: [15, 65]
 }
+
+MATRIX = [
+   [0,0,0,0,0,0],
+   [0,0,0,0,0,0],
+   [0,0,0,0,0,0]
+]
+
+MATRIX_COORDS = [250, 650]
+MATRIX_STEP = 10
 
 
 # init some basic colors

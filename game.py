@@ -22,13 +22,17 @@ class Window(SceneABS):
         self.controller.set_screen(screen)
 
     def create_widget(self):
-        pass
+        font = Font(terminal, EMERALD, 50)
+        self.text = Text(self.sc, f"{self.clock.get_fps():2.0f} FPS", font=font)
 
     def create_data(self, data):
         self.controller.loadlvl()
 
     def update(self, mouse):
         self.controller.update(mouse)
+
+        self.text.change_text(f"{self.clock.get_fps():2.0f} FPS")
+        self.text.draw(10, 10)
 
     def check(self, event, mouse):
         if event.type == pg.KEYDOWN:
@@ -38,6 +42,9 @@ class Window(SceneABS):
             if event.button == 1:
                 self.controller.kill()
                 #self.controller.loadlvl()
+
+            if event.button == 3:
+                self.controller.new_dice()
 
         if event.type == pg.MOUSEBUTTONUP:
             if event.button == 1: pass

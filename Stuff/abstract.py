@@ -1,22 +1,22 @@
 import os
 import pygame as pg
-import wPygame
 
 from abc import ABC, abstractmethod
-from .cell import Cell
 
+from .cell import Cell
 from .constpack import DICE_TYPES, COORDS, DICE_COLORS
 from .constpack import START_X, START_Y
 from .constpack import RED
 
 class Obj(ABC, Cell):
+    @staticmethod
+    def draw(text, coords, value):
+        text.change_text(f"{value:2.0f}")
+        text.draw_in_obj(*coords)
+
     def __init__(self, x, y, color=RED):
         super().__init__(x, y)
         self.fill(color)
-
-    @abstractmethod
-    def draw(self):
-        pass
 
 
 class Dice(Obj):
@@ -50,17 +50,11 @@ class Dice(Obj):
 
         return False
 
-    def draw(self):
-        pass
-
     def focus(self):
         return self.focus()
 
     def upgrade(self):
         self.dmg += DMG_UPGRADE[self.type]
-
-    def coords(self):
-        return self.get_coords()
 
     @abstractmethod
     def do_ability(self):
@@ -105,17 +99,11 @@ class Entity(Obj):
     def attacked(self, dmg):
         self.hp -= int(dmg * (1 - self.armor))
 
-    def coords(self):
-        return self.get_coords()
-
     def is_dead(self):
         if self.hp <= 0:
             return True
 
         return False
-
-    def draw(self):
-        pass
 
     @abstractmethod
     def do_ability(self):
